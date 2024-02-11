@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import springstudy.itemservice.domain.item.Item;
 import springstudy.itemservice.domain.item.ItemRepository;
 
@@ -53,11 +54,20 @@ public class BasicItemController {
 
     // @ModelAttribute에 이름 설정할 경우 자동으로 model에 추가함 (생략 가능 -> 클래스명의 첫글자를 소문자로 변경하여 자동 추가)
     // @ModelAttribute 생략 가능
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV2(Item item) {
         itemRepository.save(item);
 //        model.addAttribute(item); //자동 추가, 생략 가능
         return "redirect:/basic/items/" + item.getId();
+    }
+
+    // RedirectAttribute에서 return 값을 사용되지 않는 값은 쿼리 파라미터로 사용됨 (?status=true)
+    @PostMapping("/add")
+    public String addItemV3(Item item, RedirectAttributes redirectAttributes) {
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/basic/items/{itemId}";
     }
 
     @GetMapping("/{itemId}/edit")
