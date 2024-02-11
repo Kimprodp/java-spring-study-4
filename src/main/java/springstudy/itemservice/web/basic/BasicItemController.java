@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import springstudy.itemservice.domain.item.Item;
 import springstudy.itemservice.domain.item.ItemRepository;
 
@@ -39,10 +40,24 @@ public class BasicItemController {
         return "basic/addForm";
     }
 
-    @PostMapping("/add")
-    public String add(@ModelAttribute Item item) {
+//    @PostMapping("/add")
+    public String addItemV1(@RequestParam String itemName,
+                      @RequestParam Integer price,
+                      @RequestParam Integer quantity,
+                      Model model) {
+        Item item = new Item(itemName, price, quantity);
         itemRepository.save(item);
-        return "basic/addForm";
+        model.addAttribute(item);
+        return "basic/item";
+    }
+
+    // @ModelAttribute에 이름 설정할 경우 자동으로 model에 추가함 (생략 가능 -> 클래스명의 첫글자를 소문자로 변경하여 자동 추가)
+    // @ModelAttribute 생략 가능
+    @PostMapping("/add")
+    public String addItemV2(Item item) {
+        itemRepository.save(item);
+//        model.addAttribute(item); //자동 추가, 생략 가능
+        return "basic/item";
     }
 
     /**
