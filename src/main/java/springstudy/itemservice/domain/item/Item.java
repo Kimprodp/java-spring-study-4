@@ -1,9 +1,7 @@
 package springstudy.itemservice.domain.item;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 //@Getter @Setter
